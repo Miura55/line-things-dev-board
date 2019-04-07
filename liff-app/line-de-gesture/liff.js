@@ -278,7 +278,7 @@ async function refreshValues(device) {
 
 function updateSensorValue(device, buffer) {
     const sw1 = buffer.getInt16(0, true);
-    const sw2 = buffer.getInt16(1, true);
+    const sw2 = buffer.getInt16(2, true);
 
     getDeviceStatusSw1(device).innerText = (sw1 == 0x0001)? "ON" : "OFF";
     getDeviceStatusSw2(device).innerText = (sw2 == 0x0001)? "ON" : "OFF";
@@ -295,8 +295,10 @@ function liffToggleDeviceLedState(state) {
 }
 
 function getDeviceStatusSw1(device) {
-    return getDeviceCard(device).getElementsByClassName('sw1-value')[0];
+  alert(device);
+  // return getDeviceCard(device).getElementsByClassName('sw1-value')[0];
 }
 function getDeviceStatusSw2(device) {
-    return getDeviceCard(device).getElementsByClassName('sw2-value')[0];
+  alert(device);
+  // return getDeviceCard(device).getElementsByClassName('sw2-value')[0];
 }
