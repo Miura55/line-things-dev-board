@@ -165,9 +165,6 @@ function liffRequestDevice() {
 
 function liffConnectToDevice(device) {
     device.gatt.connect().then(() => {
-        document.getElementById("device-name").innerText = device.name;
-        document.getElementById("device-id").innerText = device.id;
-
         // Show status connected
         uiToggleDeviceConnected(true);
 
@@ -234,7 +231,7 @@ function liffGetPSDIService(service) {
         // Byte array to hex string
         const psdi = new Uint8Array(value.buffer)
             .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
-        document.getElementById("device-psdi").innerText = psdi;
+        // document.getElementById("device-psdi").innerText = psdi;
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
@@ -260,6 +257,34 @@ function liffGetButtonStateCharacteristic(characteristic) {
     });
 }
 
+
+function notificationCallback(e) {
+    const accelerometerBuffer = new DataView(e.target.value.buffer);
+    onScreenLog(`Notify ${e.target.uuid}: ${buf2hex(e.target.value.buffer)}`);
+    updateSensorValue(e.target.service.device, accelerometerBuffer);
+}
+
+async function refreshValues(device) {
+    const accelerometerCharacteristic = await getCharacteristic(
+        device, USER_SERVICE_UUID, USER_CHARACTERISTIC_NOTIFY_UUID);
+
+    const accelerometerBuffer = await readCharacteristic(accelerometerCharacteristic).catch(e => {
+        return null;
+    });
+
+    if (accelerometerBuffer !== null) {
+        updateSensorValue(device, accelerometerBuffer);
+    }
+}
+
+function updateSensorValue(device, buffer) {
+    const sw1 = buffer.getInt16(0, true);
+    const sw2 = buffer.getInt16(2, true);
+
+    getDeviceStatusSw1(device).innerText = (sw1 == 0x0001)? "ON" : "OFF";
+    getDeviceStatusSw2(device).innerText = (sw2 == 0x0001)? "ON" : "OFF";
+}
+
 function liffToggleDeviceLedState(state) {
     // on: 0x01
     // off: 0x00
@@ -268,4 +293,11 @@ function liffToggleDeviceLedState(state) {
     ).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
+}
+
+function getDeviceStatusSw1(device) {
+    return getDeviceCard(device).getElementsByClassName('sw1-value')[0];
+}
+function getDeviceStatusSw2(device) {
+    return getDeviceCard(device).getElementsByClassName('sw2-value')[0];
 }
