@@ -257,7 +257,6 @@ function liffGetButtonStateCharacteristic(characteristic) {
     });
 }
 
-
 function notificationCallback(e) {
     const accelerometerBuffer = new DataView(e.target.value.buffer);
     onScreenLog(`Notify ${e.target.uuid}: ${buf2hex(e.target.value.buffer)}`);
