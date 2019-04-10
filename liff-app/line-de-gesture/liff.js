@@ -155,16 +155,16 @@ function liffCheckAvailablityAndDo(callbackIfAvailable) {
     });;
 }
 
-function liffRequestDevice() {
-    liff.bluetooth.requestDevice().then(device => {
+async function liffRequestDevice() {
+    await liff.bluetooth.requestDevice().then(device => {
         liffConnectToDevice(device);
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
 }
 
-function liffConnectToDevice(device) {
-    device.gatt.connect().then(() => {
+async function liffConnectToDevice(device) {
+    await device.gatt.connect().then(async () => {
         document.getElementById("device-name").innerText = device.name;
         document.getElementById("device-id").innerText = device.id;
 
@@ -172,12 +172,12 @@ function liffConnectToDevice(device) {
         uiToggleDeviceConnected(true);
 
         // Get service
-        device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
+        await device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
             liffGetUserService(service);
         }).catch(error => {
             uiStatusError(makeErrorMsg(error), false);
         });
-        device.gatt.getPrimaryService(PSDI_SERVICE_UUID).then(service => {
+        await device.gatt.getPrimaryService(PSDI_SERVICE_UUID).then(service => {
             liffGetPSDIService(service);
         }).catch(error => {
             uiStatusError(makeErrorMsg(error), false);
@@ -207,16 +207,16 @@ function liffConnectToDevice(device) {
     });
 }
 
-function liffGetUserService(service) {
+async function liffGetUserService(service) {
     // Button pressed state
-    service.getCharacteristic(BTN_CHARACTERISTIC_UUID).then(characteristic => {
+    await service.getCharacteristic(BTN_CHARACTERISTIC_UUID).then(characteristic => {
         liffGetButtonStateCharacteristic(characteristic);
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
 
     // Toggle LED
-    service.getCharacteristic(LED_CHARACTERISTIC_UUID).then(characteristic => {
+    await service.getCharacteristic(LED_CHARACTERISTIC_UUID).then(characteristic => {
         window.ledCharacteristic = characteristic;
 
         // Switch off by default
@@ -240,10 +240,10 @@ function liffGetPSDIService(service) {
     });
 }
 
-function liffGetButtonStateCharacteristic(characteristic) {
+async function liffGetButtonStateCharacteristic(characteristic) {
     // Add notification hook for button state
     // (Get notified when button state changes)
-    characteristic.startNotifications().then(() => {
+    await characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const val = new DataView(e.target.value.buffer);
             const sw1 = val.getInt16(0, true);
