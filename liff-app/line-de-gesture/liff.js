@@ -257,9 +257,11 @@ async function liffGetButtonStateCharacteristic(characteristic) {
 }
 
 function getDeviceStatusSw1(device) {
+  alert("SW1 pressed")
     return getDeviceCard(device).getElementsByClassName('sw1-value')[0];
 }
 function getDeviceStatusSw2(device) {
+  alert("SW2 pressed")
     return getDeviceCard(device).getElementsByClassName('sw2-value')[0];
 }
 
