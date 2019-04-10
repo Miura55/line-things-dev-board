@@ -247,18 +247,19 @@ function liffGetButtonStateCharacteristic(characteristic) {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const val = new DataView(e.target.value.buffer);
             const sw1 = val.getInt16(0, true);
-            if (val > 0) {
-                // press
-                uiToggleStateButton(true);
-            } else {
-                // release
-                uiToggleStateButton(false);
-                uiCountPressButton();
-            }
+            getDeviceStatusSw1(device).innerText = (sw1 == 0x0001)? "ON" : "OFF";
+            getDeviceStatusSw2(device).innerText = (sw2 == 0x0001)? "ON" : "OFF";
         });
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
+}
+
+function getDeviceStatusSw1(device) {
+    return getDeviceCard(device).getElementsByClassName('sw1-value')[0];
+}
+function getDeviceStatusSw2(device) {
+    return getDeviceCard(device).getElementsByClassName('sw2-value')[0];
 }
 
 function liffToggleDeviceLedState(state) {
