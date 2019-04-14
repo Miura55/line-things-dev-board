@@ -245,7 +245,7 @@ async function liffGetButtonStateCharacteristic(characteristic) {
     // (Get notified when button state changes)
     await characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
-            const val = new DataView(e.target.value.buffer);
+            const val = new Uint8Array(e.target.value.buffer);
             const device = new e.target.service.device;
             const sw1 = val.getInt16(0, true);
             const sw2 = val.getInt16(2, true);
