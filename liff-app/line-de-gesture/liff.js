@@ -166,7 +166,6 @@ async function liffRequestDevice() {
 async function liffConnectToDevice(device) {
     await device.gatt.connect().then(async () => {
         document.getElementById("device-name").innerText = device.name;
-        // document.getElementById("device-id").innerText = device.id;
 
         // Show status connected
         uiToggleDeviceConnected(true);
@@ -174,11 +173,6 @@ async function liffConnectToDevice(device) {
         // Get service
         await device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
             liffGetUserService(service);
-        }).catch(error => {
-            uiStatusError(makeErrorMsg(error), false);
-        });
-        await device.gatt.getPrimaryService(PSDI_SERVICE_UUID).then(service => {
-            liffGetPSDIService(service);
         }).catch(error => {
             uiStatusError(makeErrorMsg(error), false);
         });
@@ -226,19 +220,6 @@ async function liffGetUserService(service) {
     });
 }
 
-function liffGetPSDIService(service) {
-    // Get PSDI value
-    service.getCharacteristic(PSDI_CHARACTERISTIC_UUID).then(characteristic => {
-        return characteristic.readValue();
-    }).then(value => {
-        // Byte array to hex string
-        const psdi = new Uint8Array(value.buffer)
-            .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
-        // document.getElementById("device-psdi").innerText = psdi;
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-}
 
 async function liffGetButtonStateCharacteristic(characteristic) {
     // Add notification hook for button state
