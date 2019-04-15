@@ -1,6 +1,7 @@
 // User service UUID: Change this to your generated service UUID
 const USER_SERVICE_UUID         = 'ae8edba0-a010-44ba-bfd6-913754414ca1'; // LED, Button
 // User service characteristics
+const USER_CHARACTERISTIC_NOTIFY_UUID = "e90b4b4e-f18a-44f0-8691-b041c7fe57f2";
 const LED_CHARACTERISTIC_UUID   = 'E9062E71-9E62-4BC6-B0D3-35CDCD9B027B';
 const BTN_CHARACTERISTIC_UUID   = '62FBD229-6EDD-4D1A-B554-5C4E1BB29169';
 
@@ -158,6 +159,55 @@ async function liffRequestDevice() {
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
+}
+
+async function toggleNotification(device) {
+    if (!connectedUUIDSet.has(device.id)) {
+        window.alert('Please connect to a device first');
+        onScreenLog('Please connect to a device first.');
+        return;
+    }
+
+    const accelerometerCharacteristic = await getCharacteristic(
+        device, USER_SERVICE_UUID, USER_CHARACTERISTIC_NOTIFY_UUID);
+
+    if (notificationUUIDSet.has(device.id)) {
+        // Stop notification
+        await stopNotification(accelerometerCharacteristic, notificationCallback);
+        notificationUUIDSet.delete(device.id);
+        getDeviceNotificationButton(device).classList.remove('btn-success');
+        getDeviceNotificationButton(device).classList.add('btn-secondary');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.remove('fa-toggle-on');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.add('fa-toggle-off');
+    } else {
+        // Start notification
+        await enableNotification(accelerometerCharacteristic, notificationCallback);
+        notificationUUIDSet.add(device.id);
+        getDeviceNotificationButton(device).classList.remove('btn-secondary');
+        getDeviceNotificationButton(device).classList.add('btn-success');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.remove('fa-toggle-off');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.add('fa-toggle-on');
+    }
+}
+
+async function refreshValues(device) {
+    const accelerometerCharacteristic = await getCharacteristic(
+        device, USER_SERVICE_UUID, USER_CHARACTERISTIC_NOTIFY_UUID);
+
+    const accelerometerBuffer = await readCharacteristic(accelerometerCharacteristic).catch(e => {
+        return null;
+    });
+
+    if (accelerometerBuffer !== null) {
+        updateSensorValue(device, accelerometerBuffer);
+    }
+}
+
+function updateSensorValue(device, buffer) {
+    const sw1 = buffer.getInt16(8, true);
+    const sw2 = buffer.getInt16(10, true);
+    getDeviceStatusSw1(device).innerText = (sw1 == 0x0001)? "ON" : "OFF";
+    getDeviceStatusSw2(device).innerText = (sw2 == 0x0001)? "ON" : "OFF";
 }
 
 async function liffConnectToDevice(device) {
