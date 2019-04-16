@@ -4,9 +4,6 @@ const USER_SERVICE_UUID         = 'ae8edba0-a010-44ba-bfd6-913754414ca1'; // LED
 const LED_CHARACTERISTIC_UUID   = 'E9062E71-9E62-4BC6-B0D3-35CDCD9B027B';
 const NOTIFY_CHARACTERISTIC_UUID   = '62FBD229-6EDD-4D1A-B554-5C4E1BB29169';
 
-// PSDI Service UUID: Fixed value for Developer Trial
-const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Device ID
-const PSDI_CHARACTERISTIC_UUID  = '26E2B12B-85F0-4F3F-9FDD-91D114270E6E';
 
 // UI settings
 let ledState = false; // true: LED on, false: LED off
@@ -246,7 +243,7 @@ function liffToggleDeviceLedState(state) {
     // on: 0x01
     // off: 0x00
     window.ledCharacteristic.writeValue(
-        state ? new Uint8Array([0x01]) : new Uint8Array([0x00])
+        state ? new TextEncoder("utf-8").encode("HIGH") : new Uint8Array([0x00])
     ).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
