@@ -7,8 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css?id=20190302_1551511101">
-  <title>Display Service</title>
+  <link rel="stylesheet" href="style.css?id=20190111_1547196772">
+  <title>Accelerometer Service</title>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
   <div class="mb-2">
     <div id="device-list" class="list-group">
       <button type="button" class="list-group-item disabled font-weight-bold">
-        <i class='fa fa-spinner fa-spin mr-2'></i> Finding Display
+        <i class='fa fa-spinner fa-spin mr-2'></i> Finding Sensor Devices
       </button>
       <button type="button" id="device-list-item"
         class="list-group-item list-group-item-action justify-content-between align-items-center d-none">
@@ -48,17 +48,43 @@
           </div>
         </div>
         <div class="card-body container" style="display:none;">
-
-          <div class="row justify-content-center align-items-center">
-            <div class="col text-center">
-              <input type="text" class="form-control input-display-text" aria-describedby="textHelp" placeholder="Enter text">
-              <small id="textHelp" class="form-text text-muted">Only supported ASCII characters.</small>
+          <div class="d-flex align-items-center justify-content-between text-center mb-3">
+            <div class="w-25 lead">
+              X
+            </div>
+            <div class="temperature-value flex-grow-1 lead">
+              <div class="progress">
+                <div class="progress-bar bg-success progress-bar-x" role="progressbar" style="width: 50%;" aria-valuenow="0" aria-valuemin="-32768" aria-valuemax="32767">0.0</div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between text-center mb-3">
+            <div class="w-25 lead">
+              Y
+            </div>
+            <div class="temperature-value flex-grow-1 lead">
+              <div class="progress">
+                <div class="progress-bar bg-info progress-bar-y" role="progressbar" style="width: 50%;" aria-valuenow="0" aria-valuemin="-32768" aria-valuemax="32767">0.0</div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between text-center mb-3">
+            <div class="w-25 lead">
+              Z
+            </div>
+            <div class="temperature-value flex-grow-1 lead">
+              <div class="progress">
+                <div class="progress-bar bg-warning progress-bar-z" role="progressbar" style="width: 50%;" aria-valuenow="0" aria-valuemin="-32768" aria-valuemax="32767">0.0</div>
+              </div>
             </div>
           </div>
 
-          <div class="row justify-content-center mt-2">
+          <div class="row justify-content-center">
             <div class="col text-center">
-              <button type="button" class="button-send btn btn-primary"><i class="fas fa-sync"></i> Send</button>
+              <button type="button" class="notification-enable btn btn-secondary"><i class="fas fa-toggle-off"></i> Notify</button>
+            </div>
+            <div class="col text-center">
+              <button type="button" class="refresh-value btn btn-primary"><i class="fas fa-sync-alt"></i> One Shot</button>
             </div>
           </div>
         </div>
@@ -91,7 +117,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
   <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
-  <script src="liff-starter.js?id=20190302_1551511101"></script>
+  <script src="liff-starter.js?id=20190111_1547196772"></script>
 </body>
 
 </html>

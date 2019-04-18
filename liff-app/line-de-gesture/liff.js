@@ -1,9 +1,13 @@
-const DISPLAY_SERVICE_UUID = "777AD5D4-7355-4682-BF3E-72FE7C70B3CE";
-const TEXT_WRITE_CHARACTERISTIC_UUID = "F13DB656-27CF-4E0D-9FC6-61FF3BAEA821";
+const ACCELEROMETER_SERVICE_UUID = "cb1d1e22-3597-4551-a5e8-9b0d6e768568";
+// x, y, z: int16 * 3 = 6 byte: g * 1000
+// Compatible with BBC micro:bit Accelerometer Characteristic
+// https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
+const ACCELEROMETER_CHARACTERISTIC_UUID = "728cf59d-6742-4274-b184-6acd2d83c68b";
 
 const deviceUUIDSet = new Set();
 const connectedUUIDSet = new Set();
 const connectingUUIDSet = new Set();
+const notificationUUIDSet = new Set();
 
 let logNumber = 1;
 
@@ -144,8 +148,11 @@ function initializeCardForDevice(device) {
         device.gatt.disconnect();
     });
 
-    template.querySelector('.button-send').addEventListener('click', () => {
-        updateText(device).catch(e => onScreenLog(`ERROR on updateText(): ${e}\n${e.stack}`));
+    template.querySelector('.refresh-value').addEventListener('click', () => {
+        refreshValues(device).catch(e => onScreenLog(`ERROR on refreshValues(): ${e}\n${e.stack}`));
+    });
+    template.querySelector('.notification-enable').addEventListener('click', () => {
+        toggleNotification(device).catch(e => onScreenLog(`ERROR on toggleNotification(): ${e}\n${e.stack}`));
     });
 
     // Remove existing same id card
@@ -192,16 +199,79 @@ function updateConnectionStatus(device, status) {
     }
 }
 
-async function updateText(device) {
-    const inputText = getDeviceInputText(device).value;
+async function toggleNotification(device) {
+    if (!connectedUUIDSet.has(device.id)) {
+        window.alert('Please connect to a device first');
+        onScreenLog('Please connect to a device first.');
+        return;
+    }
 
-    onScreenLog(`${inputText}`);
-    const payload = inputText.split("").concat(["\0"]).map(c => c.charCodeAt());
-    onScreenLog(`${payload}`);
+    const accelerometerCharacteristic = await getCharacteristic(
+        device, ACCELEROMETER_SERVICE_UUID, ACCELEROMETER_CHARACTERISTIC_UUID);
 
-    const characteristic = await getCharacteristic(
-        device, DISPLAY_SERVICE_UUID, TEXT_WRITE_CHARACTERISTIC_UUID);
-    await writeCharacteristic(characteristic, payload);
+    if (notificationUUIDSet.has(device.id)) {
+        // Stop notification
+        await stopNotification(accelerometerCharacteristic, notificationCallback);
+        notificationUUIDSet.delete(device.id);
+        getDeviceNotificationButton(device).classList.remove('btn-success');
+        getDeviceNotificationButton(device).classList.add('btn-secondary');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.remove('fa-toggle-on');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.add('fa-toggle-off');
+    } else {
+        // Start notification
+        await enableNotification(accelerometerCharacteristic, notificationCallback);
+        notificationUUIDSet.add(device.id);
+        getDeviceNotificationButton(device).classList.remove('btn-secondary');
+        getDeviceNotificationButton(device).classList.add('btn-success');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.remove('fa-toggle-off');
+        getDeviceNotificationButton(device).getElementsByClassName('fas')[0].classList.add('fa-toggle-on');
+    }
+}
+
+async function enableNotification(characteristic, callback) {
+    const device = characteristic.service.device;
+    characteristic.addEventListener('characteristicvaluechanged', callback);
+    await characteristic.startNotifications();
+    onScreenLog('Notifications STARTED ' + characteristic.uuid + ' ' + device.id);
+}
+
+async function stopNotification(characteristic, callback) {
+    const device = characteristic.service.device;
+    characteristic.removeEventListener('characteristicvaluechanged', callback);
+    await characteristic.stopNotifications();
+    onScreenLog('Notifications STOPPED　' + characteristic.uuid + ' ' + device.id);
+}
+
+function notificationCallback(e) {
+    const accelerometerBuffer = new DataView(e.target.value.buffer);
+    onScreenLog(`Notify ${e.target.uuid}: ${buf2hex(e.target.value.buffer)}`);
+    updateXYZ(e.target.service.device, accelerometerBuffer);
+}
+
+async function refreshValues(device) {
+    const accelerometerCharacteristic = await getCharacteristic(
+        device, ACCELEROMETER_SERVICE_UUID, ACCELEROMETER_CHARACTERISTIC_UUID);
+
+    const accelerometerBuffer = await readCharacteristic(accelerometerCharacteristic).catch(e => {
+        return null;
+    });
+
+    if (accelerometerBuffer !== null) {
+        updateXYZ(device, accelerometerBuffer);
+    }
+}
+
+function updateXYZ(device, buffer) {
+    const accelX = buffer.getInt16(0, true) / 1000.0;
+    const accelY = buffer.getInt16(2, true) / 1000.0;
+    const accelZ = buffer.getInt16(4, true) / 1000.0;
+
+    getDeviceProgressBarX(device).style.width = (accelX / 4 * 100 + 50) + "%";
+    getDeviceProgressBarY(device).style.width = (accelY / 4 * 100 + 50) + "%";
+    getDeviceProgressBarZ(device).style.width = (accelZ / 4 * 100 + 50) + "%";
+    getDeviceProgressBarX(device).innerText = accelX;
+    getDeviceProgressBarY(device).innerText = accelY;
+    getDeviceProgressBarZ(device).innerText = accelZ;
 }
 
 async function readCharacteristic(characteristic) {
@@ -223,7 +293,7 @@ async function writeCharacteristic(characteristic, command) {
         onScreenLog(`Error writing ${characteristic.uuid}: ${e}`);
         throw e;
     });
-    onScreenLog(`Wrote ${characteristic.uuid}: ${command}`);
+    //onScreenLog(`Wrote ${characteristic.uuid}: ${command}`);
 }
 
 async function getCharacteristic(device, serviceId, characteristicId) {
@@ -255,8 +325,20 @@ function getDeviceDisconnectButton(device) {
     return getDeviceCard(device).getElementsByClassName('device-disconnect')[0];
 }
 
-function getDeviceInputText(device) {
-    return getDeviceCard(device).getElementsByClassName('input-display-text')[0];
+function getDeviceProgressBarX(device) {
+    return getDeviceCard(device).getElementsByClassName('progress-bar-x')[0];
+}
+
+function getDeviceProgressBarY(device) {
+    return getDeviceCard(device).getElementsByClassName('progress-bar-y')[0];
+}
+
+function getDeviceProgressBarZ(device) {
+    return getDeviceCard(device).getElementsByClassName('progress-bar-z')[0];
+}
+
+function getDeviceNotificationButton(device) {
+    return getDeviceCard(device).getElementsByClassName('notification-enable')[0];
 }
 
 function renderVersionField() {
