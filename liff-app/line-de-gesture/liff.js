@@ -43,12 +43,6 @@ function uiToggleLedButton(state) {
     }
 }
 
-function uiCountPressButton() {
-    clickCount++;
-
-    const el = document.getElementById("click-count");
-    el.innerText = clickCount;
-}
 
 function uiToggleStateButton(pressed) {
     const el = document.getElementById("btn-state");
@@ -231,7 +225,6 @@ function liffGetButtonStateCharacteristic(characteristic) {
             } else {
                 // release
                 uiToggleStateButton(false);
-                uiCountPressButton();
             }
         });
     }).catch(error => {
