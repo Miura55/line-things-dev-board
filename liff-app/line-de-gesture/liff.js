@@ -223,6 +223,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const sw2 = buffer[1];
             if (sw1 > 0　|| sw2 > 0) {
                 // press
+                alert(buffer);
                 uiToggleStateButton(true);
             } else {
                 // release
