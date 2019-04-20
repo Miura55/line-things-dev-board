@@ -224,7 +224,6 @@ function liffGetButtonStateCharacteristic(characteristic) {
             if (sw1 == 0x0001 || sw2 == 0x0001) {
                 // press
                 uiToggleStateButton(true);
-                window.alert(buffer);
             } else {
                 // release
                 uiToggleStateButton(false);
