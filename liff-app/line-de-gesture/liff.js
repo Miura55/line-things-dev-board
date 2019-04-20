@@ -220,7 +220,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const buffer = new DataView(e.target.value.buffer);
             const val = buffer.getInt16(0, true);
-            if (val) {
+            if (val == 0x0001) {
                 // press
                 uiToggleStateButton(true);
             } else {
