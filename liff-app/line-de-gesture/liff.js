@@ -240,7 +240,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
                 uiToggleStateButton0(true);
             }
             else if (sw2 == 0x0001) {
-                uiToggleStateButton1(false);
+                uiToggleStateButton1(true);
             }
             else {
                 uiToggleStateButton0(false);
