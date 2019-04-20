@@ -219,12 +219,12 @@ function liffGetButtonStateCharacteristic(characteristic) {
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             const buffer = new DataView(e.target.value.buffer);
-            window.alert(buffer);
             const sw1 = buffer[0];
             const sw2 = buffer[1];
             if (sw1 > 0　|| sw2 > 0) {
                 // press
                 uiToggleStateButton(true);
+                window.alert(buffer);
             } else {
                 // release
                 uiToggleStateButton(false);
