@@ -237,6 +237,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const sw2 = buffer.getInt16(2, true);
             const ges = buffer.getInt16(6, true);
 
+            getGesture(e.target.device).innerText = ges;
             if (sw1 == 0x0001) {
                 // press
                 uiToggleStateButton0(true);
@@ -253,7 +254,13 @@ function liffGetButtonStateCharacteristic(characteristic) {
         uiStatusError(makeErrorMsg(error), false);
     });
 }
+function getDeviceCard(device) {
+    return document.getElementById('device-' + device.id);
+}
 
+function getGesture(device) {
+    return getDeviceCard(device).getElementsByClassName('ges-state')[0];
+}
 function liffToggleDeviceLedState(state) {
     // on: 0x01
     // off: 0x00
