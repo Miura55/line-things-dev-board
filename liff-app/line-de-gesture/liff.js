@@ -44,8 +44,20 @@ function uiToggleLedButton(state) {
 }
 
 
-function uiToggleStateButton(pressed) {
-    const el = document.getElementById("btn-state");
+function uiToggleStateButton0(pressed) {
+    const el = document.getElementById("btn0-state");
+
+    if (pressed) {
+        el.classList.add("pressed");
+        el.innerText = "Pressed";
+    } else {
+        el.classList.remove("pressed");
+        el.innerText = "Released";
+    }
+}
+
+function uiToggleStateButton1(pressed) {
+    const el = document.getElementById("btn1-state");
 
     if (pressed) {
         el.classList.add("pressed");
@@ -181,7 +193,8 @@ function liffConnectToDevice(device) {
             ledState = false;
             // Reset UI elements
             uiToggleLedButton(false);
-            uiToggleStateButton(false);
+            uiToggleStateButton0(false);
+            uiToggleStateButton1(false);
 
             // Try to reconnect
             initializeLiff();
@@ -222,12 +235,16 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const sw1 = buffer.getInt16(0, true);
             const sw2 = buffer.getInt16(2, true);
             // window.alert(sw1);
-            if (sw1 == 0x0001 || sw2 == 0x0001) {
+            if (sw1 == 0x0001) {
                 // press
-                uiToggleStateButton(true);
-            } else {
-                // release
-                uiToggleStateButton(false);
+                uiToggleStateButton0(true);
+            }
+            else if (sw2 == 0x0001) {
+                uiToggleStateButton1(false);
+            }
+            else {
+                uiToggleStateButton0(false);
+                uiToggleStateButton1(false);
             }
         });
     }).catch(error => {
