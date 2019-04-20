@@ -218,9 +218,9 @@ function liffGetButtonStateCharacteristic(characteristic) {
     // (Get notified when button state changes)
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
-            const buffer = e.target.value.buffer;
-            const sw1 = (new Uint8Array(e.target.value.buffer))[0];
-            const sw2 = (new Uint8Array(e.target.value.buffer))[2];
+            const buffer = new Uint8Array(e.target.value.buffer);
+            const sw1 = buffer[0];
+            const sw2 = buffer[1];
             if (sw1 > 0　|| sw2 > 0) {
                 // press
                 uiToggleStateButton(true);
