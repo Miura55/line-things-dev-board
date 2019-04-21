@@ -254,12 +254,12 @@ function liffGetButtonStateCharacteristic(characteristic) {
         uiStatusError(makeErrorMsg(error), false);
     });
 }
-function getDeviceCard(device) {
-    return document.getElementById('device-' + device.id);
-}
+
 
 function getGesture(device) {
-    return getDeviceCard(device).getElementsByClassName('ges-state')[0];
+    el = document.getElementById('ges-state')
+    el.classList.add("gesture");
+    return el;
 }
 function liffToggleDeviceLedState(state) {
     // on: 0x01
