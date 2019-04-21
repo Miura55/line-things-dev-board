@@ -237,7 +237,11 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const sw2 = buffer.getInt16(2, true);
             const ges = buffer.getInt16(4, true);
 
-            getGesture(e.target.device).innerText = ges;
+            // gesture list
+            const ges_lis = ["Up", "Down"]
+            getGesture(e.target.device).innerText = ges_lis[ges];
+
+            // switch action
             if (sw1 == 0x0001) {
                 // press
                 uiToggleStateButton0(true);
