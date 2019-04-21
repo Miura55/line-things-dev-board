@@ -235,7 +235,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const buffer = new DataView(e.target.value.buffer);
             const sw1 = buffer.getInt16(0, true);
             const sw2 = buffer.getInt16(2, true);
-            const ges = buffer.getInt16(6, true);
+            const ges = buffer.getInt16(4, true);
 
             getGesture(e.target.device).innerText = ges;
             if (sw1 == 0x0001) {
