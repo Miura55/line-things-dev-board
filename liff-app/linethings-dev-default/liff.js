@@ -238,7 +238,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const ges = buffer.getInt16(4, true);
 
             // gesture list
-            const ges_lis = ["Up", "Down"]
+            const ges_lis = ["Up", "Down", "Right", "Left"]
             getGesture(e.target.device).innerText = ges_lis[ges];
 
             // switch action
