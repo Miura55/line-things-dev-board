@@ -7,9 +7,6 @@ const NOTIFY_CHARACTERISTIC_UUID   = '62FBD229-6EDD-4D1A-B554-5C4E1BB29169';
 const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Device ID
 const PSDI_CHARACTERISTIC_UUID  = '26E2B12B-85F0-4F3F-9FDD-91D114270E6E';
 
-// UI settings
-let ledState = false; // true: LED on, false: LED off
-let clickCount = 0;
 
 // -------------- //
 // On window load //
@@ -24,29 +21,6 @@ window.onload = () => {
 // UI functions //
 // ------------ //
 
-function uiToggleStateButton0(pressed) {
-    const el = document.getElementById("btn0-state");
-
-    if (pressed) {
-        el.classList.add("pressed");
-        el.innerText = "Pressed";
-    } else {
-        el.classList.remove("pressed");
-        el.innerText = "Released";
-    }
-}
-
-function uiToggleStateButton1(pressed) {
-    const el = document.getElementById("btn1-state");
-
-    if (pressed) {
-        el.classList.add("pressed");
-        el.innerText = "Pressed";
-    } else {
-        el.classList.remove("pressed");
-        el.innerText = "Released";
-    }
-}
 
 function uiToggleDeviceConnected(connected) {
     const elStatus = document.getElementById("status");
@@ -181,12 +155,6 @@ function liffConnectToDevice(device) {
             // Remove disconnect callback
             device.removeEventListener('gattserverdisconnected', disconnectCallback);
 
-            // Reset LED state
-            ledState = false;
-            // Reset UI elements
-            uiToggleStateButton0(false);
-            uiToggleStateButton1(false);
-
             // Try to reconnect
             initializeLiff();
         };
@@ -235,18 +203,6 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const ges_lis = ["Up", "Down"];
             getGesture(e.target.device).innerText = ges_lis[ges];
 
-            // switch action
-            if (sw1 == 0x0001) {
-                // press
-                uiToggleStateButton0(true);
-            }
-            else if (sw2 == 0x0001) {
-                uiToggleStateButton1(true);
-            }
-            else {
-                uiToggleStateButton0(false);
-                uiToggleStateButton1(false);
-            }
         });
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
