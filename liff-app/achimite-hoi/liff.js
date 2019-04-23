@@ -195,9 +195,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             // get buffer
             const buffer = new DataView(e.target.value.buffer);
-            const sw1 = buffer.getInt16(0, true);
-            const sw2 = buffer.getInt16(2, true);
-            const ges = buffer.getInt16(4, true);
+            const ges = buffer.getInt16(0, true);
 
             // gesture list
             const ges_lis = ["Up", "Down"];
