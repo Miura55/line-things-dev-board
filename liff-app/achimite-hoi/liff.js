@@ -3,6 +3,9 @@ const USER_SERVICE_UUID         = 'a9ac3bb1-3efe-45c7-ab8d-0b9b82492c7f'; // LED
 // User service characteristics
 const NOTIFY_CHARACTERISTIC_UUID   = '62FBD229-6EDD-4D1A-B554-5C4E1BB29169';
 
+// PSDI Service UUID: Fixed value for Developer Trial
+const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Device ID
+const PSDI_CHARACTERISTIC_UUID  = '26E2B12B-85F0-4F3F-9FDD-91D114270E6E';
 
 // UI settings
 let ledState = false; // true: LED on, false: LED off
@@ -149,6 +152,18 @@ function liffConnectToDevice(device) {
 
         // Show status connected
         uiToggleDeviceConnected(true);
+
+        // Get service
+        device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
+            liffGetUserService(service);
+        }).catch(error => {
+            uiStatusError(makeErrorMsg(error), false);
+        });
+        device.gatt.getPrimaryService(PSDI_SERVICE_UUID).then(service => {
+            liffGetPSDIService(service);
+        }).catch(error => {
+            uiStatusError(makeErrorMsg(error), false);
+        });
 
         // Get service
         device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
