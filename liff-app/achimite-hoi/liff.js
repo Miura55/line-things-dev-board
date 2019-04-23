@@ -206,6 +206,19 @@ function liffGetUserService(service) {
     });
 }
 
+function liffGetPSDIService(service) {
+    // Get PSDI value
+    service.getCharacteristic(PSDI_CHARACTERISTIC_UUID).then(characteristic => {
+        return characteristic.readValue();
+    }).then(value => {
+        // Byte array to hex string
+        const psdi = new Uint8Array(value.buffer)
+            .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
+        //document.getElementById("device-psdi").innerText = psdi;
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
+}
 
 function liffGetButtonStateCharacteristic(characteristic) {
     // Add notification hook for button state
