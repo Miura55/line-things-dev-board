@@ -17,32 +17,10 @@ window.onload = () => {
     initializeApp();
 };
 
-// ----------------- //
-// Handler functions //
-// ----------------- //
-
-function handlerToggleLed() {
-    ledState = !ledState;
-
-    uiToggleLedButton(ledState);
-    liffToggleDeviceLedState(ledState);
-}
 
 // ------------ //
 // UI functions //
 // ------------ //
-
-function uiToggleLedButton(state) {
-    const el = document.getElementById("btn-led-toggle");
-    el.innerText = state ? "Switch LED OFF" : "Switch LED ON";
-
-    if (state) {
-      el.classList.add("led-on");
-    } else {
-      el.classList.remove("led-on");
-    }
-}
-
 
 function uiToggleStateButton0(pressed) {
     const el = document.getElementById("btn0-state");
@@ -192,7 +170,6 @@ function liffConnectToDevice(device) {
             // Reset LED state
             ledState = false;
             // Reset UI elements
-            uiToggleLedButton(false);
             uiToggleStateButton0(false);
             uiToggleStateButton1(false);
 
@@ -210,16 +187,6 @@ function liffGetUserService(service) {
     // Button pressed state
     service.getCharacteristic(NOTIFY_CHARACTERISTIC_UUID).then(characteristic => {
         liffGetButtonStateCharacteristic(characteristic);
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-
-    // Toggle LED
-    service.getCharacteristic(LED_CHARACTERISTIC_UUID).then(characteristic => {
-        window.ledCharacteristic = characteristic;
-
-        // Switch off by default
-        liffToggleDeviceLedState(false);
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
@@ -264,13 +231,4 @@ function getGesture(device) {
     el = document.getElementById('ges-state')
     el.classList.add("gesture");
     return el;
-}
-function liffToggleDeviceLedState(state) {
-    // on: 0x01
-    // off: 0x00
-    window.ledCharacteristic.writeValue(
-        state ? new Uint8Array([0x01]) : new Uint8Array([0x00])
-    ).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
 }
