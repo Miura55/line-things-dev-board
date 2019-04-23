@@ -179,6 +179,11 @@ function liffConnectToDevice(device) {
         }).catch(error => {
             uiStatusError(makeErrorMsg(error), false);
         });
+        device.gatt.getPrimaryService(PSDI_SERVICE_UUID).then(service => {
+            liffGetPSDIService(service);
+        }).catch(error => {
+            uiStatusError(makeErrorMsg(error), false);
+        });
 
 
         // Device disconnect callback
@@ -206,6 +211,20 @@ function liffConnectToDevice(device) {
     });
 }
 
+function liffGetPSDIService(service) {
+    // Get PSDI value
+    service.getCharacteristic(PSDI_CHARACTERISTIC_UUID).then(characteristic => {
+        return characteristic.readValue();
+    }).then(value => {
+        // Byte array to hex string
+        const psdi = new Uint8Array(value.buffer)
+            .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
+        //document.getElementById("device-psdi").innerText = psdi;
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
+}
+
 function liffGetUserService(service) {
     // Button pressed state
     service.getCharacteristic(NOTIFY_CHARACTERISTIC_UUID).then(characteristic => {
@@ -224,7 +243,6 @@ function liffGetUserService(service) {
         uiStatusError(makeErrorMsg(error), false);
     });
 }
-
 
 function liffGetButtonStateCharacteristic(characteristic) {
     // Add notification hook for button state
