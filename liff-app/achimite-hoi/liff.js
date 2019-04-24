@@ -195,11 +195,11 @@ function liffGetButtonStateCharacteristic(characteristic) {
         characteristic.addEventListener('characteristicvaluechanged', e => {
             // get buffer
             const buffer = new DataView(e.target.value.buffer);
-            const ges = buffer.getInt16(0, true);
+            const ges_id = buffer.getInt16(0, true);
 
             // gesture list
             const ges_lis = ["Up.png", "Down.png"];
-            document.getElementById("dir_pic").src = ges_lis;
+            document.getElementById("dir_pic").src = ges_lis[ges_id];
 
         });
     }).catch(error => {
