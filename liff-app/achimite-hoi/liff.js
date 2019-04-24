@@ -198,18 +198,11 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const ges = buffer.getInt16(0, true);
 
             // gesture list
-            const ges_lis = ["Up", "Down"];
-            getGesture(e.target.device).innerText = ges_lis[ges];
+            const ges_lis = ["Up.png", "Down.png"];
+            document.getElementById("dir_pic").src = ges_lis;
 
         });
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
-}
-
-
-function getGesture(device) {
-    el = document.getElementById('ges-state')
-    el.classList.add("gesture");
-    return el;
 }
