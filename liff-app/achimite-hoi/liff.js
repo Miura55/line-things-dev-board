@@ -198,7 +198,7 @@ function liffGetButtonStateCharacteristic(characteristic) {
             const ges_id = buffer.getInt16(0, true);
 
             // gesture list
-            const ges_lis = ["Up.png", "Down.png"];
+            const ges_lis = new Array("Up.png", "Down.png");
             document.getElementById("dir_pic").src = ges_lis[ges_id];
 
         });
