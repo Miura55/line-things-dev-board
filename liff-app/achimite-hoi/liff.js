@@ -139,14 +139,6 @@ function liffConnectToDevice(device) {
             uiStatusError(makeErrorMsg(error), false);
         });
 
-        // Get service
-        device.gatt.getPrimaryService(USER_SERVICE_UUID).then(service => {
-            liffGetUserService(service);
-        }).catch(error => {
-            uiStatusError(makeErrorMsg(error), false);
-        });
-
-
         // Device disconnect callback
         const disconnectCallback = () => {
             // Show status disconnected
