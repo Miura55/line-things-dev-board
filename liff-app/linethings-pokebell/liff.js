@@ -46,21 +46,15 @@ function uiToggleLedButton(state) {
     }
 }
 
+function uiCountPressButton() {
+    clickCount++;
 
-function uiToggleStateButton0(pressed) {
-    const el = document.getElementById("btn0-state");
-
-    if (pressed) {
-        el.classList.add("pressed");
-        el.innerText = "Pressed";
-    } else {
-        el.classList.remove("pressed");
-        el.innerText = "Released";
-    }
+    const el = document.getElementById("click-count");
+    el.innerText = clickCount;
 }
 
-function uiToggleStateButton1(pressed) {
-    const el = document.getElementById("btn1-state");
+function uiToggleStateButton(pressed) {
+    const el = document.getElementById("btn-state");
 
     if (pressed) {
         el.classList.add("pressed");
@@ -172,6 +166,7 @@ function liffRequestDevice() {
 function liffConnectToDevice(device) {
     device.gatt.connect().then(() => {
         document.getElementById("device-name").innerText = device.name;
+        document.getElementById("device-id").innerText = device.id;
 
         // Show status connected
         uiToggleDeviceConnected(true);
@@ -188,7 +183,6 @@ function liffConnectToDevice(device) {
             uiStatusError(makeErrorMsg(error), false);
         });
 
-
         // Device disconnect callback
         const disconnectCallback = () => {
             // Show status disconnected
@@ -201,8 +195,7 @@ function liffConnectToDevice(device) {
             ledState = false;
             // Reset UI elements
             uiToggleLedButton(false);
-            uiToggleStateButton0(false);
-            uiToggleStateButton1(false);
+            uiToggleStateButton(false);
 
             // Try to reconnect
             initializeLiff();
@@ -214,23 +207,9 @@ function liffConnectToDevice(device) {
     });
 }
 
-function liffGetPSDIService(service) {
-    // Get PSDI value
-    service.getCharacteristic(PSDI_CHARACTERISTIC_UUID).then(characteristic => {
-        return characteristic.readValue();
-    }).then(value => {
-        // Byte array to hex string
-        const psdi = new Uint8Array(value.buffer)
-            .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
-        //document.getElementById("device-psdi").innerText = psdi;
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-}
-
 function liffGetUserService(service) {
     // Button pressed state
-    service.getCharacteristic(NOTIFY_CHARACTERISTIC_UUID).then(characteristic => {
+    service.getCharacteristic(BTN_CHARACTERISTIC_UUID).then(characteristic => {
         liffGetButtonStateCharacteristic(characteristic);
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
@@ -247,32 +226,33 @@ function liffGetUserService(service) {
     });
 }
 
+function liffGetPSDIService(service) {
+    // Get PSDI value
+    service.getCharacteristic(PSDI_CHARACTERISTIC_UUID).then(characteristic => {
+        return characteristic.readValue();
+    }).then(value => {
+        // Byte array to hex string
+        const psdi = new Uint8Array(value.buffer)
+            .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
+        document.getElementById("device-psdi").innerText = psdi;
+    }).catch(error => {
+        uiStatusError(makeErrorMsg(error), false);
+    });
+}
+
 function liffGetButtonStateCharacteristic(characteristic) {
     // Add notification hook for button state
     // (Get notified when button state changes)
     characteristic.startNotifications().then(() => {
         characteristic.addEventListener('characteristicvaluechanged', e => {
-            // get buffer
-            const buffer = new DataView(e.target.value.buffer);
-            const sw1 = buffer.getInt16(0, true);
-            const sw2 = buffer.getInt16(2, true);
-            const ges = buffer.getInt16(4, true);
-
-            // gesture list
-            const ges_lis = ["Up", "Down"];
-            getGesture(e.target.device).innerText = ges_lis[ges];
-
-            // switch action
-            if (sw1 == 0x0001) {
+            const val = (new Uint8Array(e.target.value.buffer))[0];
+            if (val > 0) {
                 // press
-                uiToggleStateButton0(true);
-            }
-            else if (sw2 == 0x0001) {
-                uiToggleStateButton1(true);
-            }
-            else {
-                uiToggleStateButton0(false);
-                uiToggleStateButton1(false);
+                uiToggleStateButton(true);
+            } else {
+                // release
+                uiToggleStateButton(false);
+                uiCountPressButton();
             }
         });
     }).catch(error => {
@@ -280,12 +260,6 @@ function liffGetButtonStateCharacteristic(characteristic) {
     });
 }
 
-
-function getGesture(device) {
-    el = document.getElementById('ges-state')
-    el.classList.add("gesture");
-    return el;
-}
 function liffToggleDeviceLedState(state) {
     // on: 0x01
     // off: 0x00
