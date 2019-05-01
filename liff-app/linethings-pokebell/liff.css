@@ -18,9 +18,8 @@ input[type="submit"] {
   color: #fff;
   border-style: none;
 }
-
-
-.tpy-mess{
+input[type="text"]{
+  -webkit-appearance: none;
   border:0;
   padding:10px;
   font-size:1.3em;
