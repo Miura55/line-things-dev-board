@@ -9,7 +9,7 @@ body, table {
 p {
     padding: 0pt 14pt;
 }
-input#tpy-mess{
+.tpy-mess{
   border:0;
   padding:10px;
   font-size:1.3em;
@@ -23,7 +23,7 @@ input#tpy-mess{
   border-radius: 3px;
 }
 
-input#submit_button {
+.submit_button {
     padding: 15px 40px;
     font-size: 1.2em;
     background-color: #000;
