@@ -46,24 +46,7 @@ function uiToggleLedButton(state) {
     }
 }
 
-function uiCountPressButton() {
-    clickCount++;
 
-    const el = document.getElementById("click-count");
-    el.innerText = clickCount;
-}
-
-function uiToggleStateButton(pressed) {
-    const el = document.getElementById("btn-state");
-
-    if (pressed) {
-        el.classList.add("pressed");
-        el.innerText = "Pressed";
-    } else {
-        el.classList.remove("pressed");
-        el.innerText = "Released";
-    }
-}
 
 function uiToggleDeviceConnected(connected) {
     const elStatus = document.getElementById("status");
@@ -165,8 +148,6 @@ function liffRequestDevice() {
 
 function liffConnectToDevice(device) {
     device.gatt.connect().then(() => {
-        document.getElementById("device-name").innerText = device.name;
-
         // Show status connected
         uiToggleDeviceConnected(true);
 
@@ -194,7 +175,6 @@ function liffConnectToDevice(device) {
             ledState = false;
             // Reset UI elements
             uiToggleLedButton(false);
-            uiToggleStateButton(false);
 
             // Try to reconnect
             initializeLiff();
@@ -207,12 +187,6 @@ function liffConnectToDevice(device) {
 }
 
 function liffGetUserService(service) {
-    // Button pressed state
-    service.getCharacteristic(BTN_CHARACTERISTIC_UUID).then(characteristic => {
-        liffGetButtonStateCharacteristic(characteristic);
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
 
     // Toggle LED
     service.getCharacteristic(LED_CHARACTERISTIC_UUID).then(characteristic => {
@@ -234,26 +208,6 @@ function liffGetPSDIService(service) {
         const psdi = new Uint8Array(value.buffer)
             .reduce((output, byte) => output + ("0" + byte.toString(16)).slice(-2), "");
         console.log(psdi)
-    }).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
-}
-
-function liffGetButtonStateCharacteristic(characteristic) {
-    // Add notification hook for button state
-    // (Get notified when button state changes)
-    characteristic.startNotifications().then(() => {
-        characteristic.addEventListener('characteristicvaluechanged', e => {
-            const val = (new Uint8Array(e.target.value.buffer))[0];
-            if (val > 0) {
-                // press
-                uiToggleStateButton(true);
-            } else {
-                // release
-                uiToggleStateButton(false);
-                uiCountPressButton();
-            }
-        });
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
