@@ -12,6 +12,11 @@ p {
 input[type="submit"] {
   -webkit-appearance: none;
   border-radius: 0;
+  padding: 15px 40px;
+  font-size: 1.2em;
+  background-color: #000;
+  color: #fff;
+  border-style: none;
 }
 
 
@@ -29,13 +34,6 @@ input[type="submit"] {
   border-radius: 3px;
 }
 
-.submit_button {
-  padding: 15px 40px;
-  font-size: 1.2em;
-  background-color: #000;
-  color: #fff;
-  border-style: none;
-}
 
 .btn {
     padding: 2pt;
