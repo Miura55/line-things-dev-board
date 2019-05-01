@@ -23,7 +23,7 @@ input{
   border-radius: 3px;
 }
 
-input[type="submit"] {
+input[type="button"] {
   -webkit-appearance: none;
   border-radius: 0;
   padding: 15px 40px;

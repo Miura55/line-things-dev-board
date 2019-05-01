@@ -19,11 +19,11 @@
     <hr />
     <div id="controls" class="hidden">
       <!-- input num -->
-      <form id="form" name="send_message">
+      <form id="form" name="send_message" action="">
         <p>メッセージを数字で入力<br>
-          <input type="text" name="message" placeholder="message">
+          <input id="tpy_mess" type="text" name="message" placeholder="message">
         </p>
-        <p><input type="submit" value="送信" onclick="getmessage(); return false;"></p>
+        <p><input id="submit_button" type="button" value="送信" onclick="getmessage();"></p>
       </form>
       <hr />
       <!-- Toggle LED -->

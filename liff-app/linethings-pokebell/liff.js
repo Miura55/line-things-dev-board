@@ -201,11 +201,7 @@ function liffGetUserService(service) {
 
 function getmessage(){
   //テキストボックス
-	if ($('#form [name=message]').val() == ""){
-		var text = "入力なし";
-	} else {
-		var text = $('#form [name=message]').val();
-	}
+	var text = document.forms.form.tpy_mess.value;
   return false;
 }
 
