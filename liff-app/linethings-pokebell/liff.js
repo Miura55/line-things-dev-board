@@ -199,6 +199,16 @@ function liffGetUserService(service) {
     });
 }
 
+function getmessage(){
+  //テキストボックス
+	if ($('#form [name=message]').val() == ""){
+		var text = "入力なし";
+	} else {
+		var text = $('#form [name=message]').val();
+	}
+  return false;
+}
+
 function liffGetPSDIService(service) {
     // Get PSDI value
     service.getCharacteristic(PSDI_CHARACTERISTIC_UUID).then(characteristic => {
