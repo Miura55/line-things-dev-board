@@ -223,7 +223,6 @@ function liffGetPSDIService(service) {
 function liffToggleDeviceLedState(state) {
     // on: 0x01
     // off: 0x00
-
     window.ledCharacteristic.writeValue(
         state ? new Uint8Array([0x09, 0x02]) : new Uint8Array([0x00, 0x00])
     ).catch(error => {
