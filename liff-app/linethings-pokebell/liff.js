@@ -202,6 +202,7 @@ function liffGetUserService(service) {
 function getmessage(){
   //テキストボックス
 	var text = document.forms.form.tpy_mess.value;
+  alert(text);
   return false;
 }
 
