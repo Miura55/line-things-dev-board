@@ -17,7 +17,16 @@ p {
     text-decoration: none;
     display: inline-block;
 }
-
+.btn-send{
+    box-shadow: 0 4pt 8pt 0 rgba(0,0,0,0.2), 0 3pt 10pt 0 rgba(0,0,0,0.19);
+    color: #f8f9fa; /* Light */
+    background-color: #6c757d; /* Gray */
+    width: 160pt;
+    font-weight: bold;
+    height: 40pt;
+    border: 2pt solid black;
+    border-radius: 8pt;
+}
 .btn-led-toggle {
     box-shadow: 0 4pt 8pt 0 rgba(0,0,0,0.2), 0 3pt 10pt 0 rgba(0,0,0,0.19);
     color: #f8f9fa; /* Light */
