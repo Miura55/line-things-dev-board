@@ -6,13 +6,12 @@
     <script src=" https://d.line-scdn.net/liff/1.0/sdk.js"></script>
     <script src="liff.js"></script>
     <script type="text/javascript">
-    $('input').on('keydown', function(e){
-        if ((e.wich && e.wich === 13) || (e.keyCode && e.keyCode === 13)) {
-          return false
-        } else {
-          return true
-        }
-    })
+    $('input').on('keypress',function (e) {
+      if (e.which == 13) {  // Enterキーのキーコード
+        e.preventDefault(); // 送信潰す
+        e.target.blur();    // フォーカス外してキーボードを消す。
+      }
+    });
     </script>
     <link rel="stylesheet" type="text/css" href="liff.css" />
   </head>
