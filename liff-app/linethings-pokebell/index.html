@@ -19,11 +19,11 @@
     <hr />
     <div id="controls" class="hidden">
       <!-- input num -->
-      <form id="form" name="send_message" onsubmit="getmessage();">
+      <form id="form" name="send_message">
         <p>メッセージを数字で入力<br>
           <input type="text" name="message" placeholder="message">
         </p>
-        <p><input type="submit" value="送信"></p>
+        <p><input type="submit" value="送信" onclick="getmessage(); return false;"></p>
       </form>
       <hr />
       <!-- Toggle LED -->
