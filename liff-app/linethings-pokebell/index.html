@@ -6,19 +6,11 @@
     <script src=" https://d.line-scdn.net/liff/1.0/sdk.js"></script>
     <script src="liff.js"></script>
     <script type="text/javascript">
-    (function preventKeyBoardSubmit(){
-      if(!isSP()) return;
-      // スマホで決定ボタンをおした時にformがsubmitされるのを防ぐ。キーボードを閉じる挙動で代替させる。
-        $('input').on('keypress', (e) => {
-          if(e.keyCode === 13){
-              e.preventDefault();
-
-              // 現在フォーカスしている入力欄からフォーカスを外すことで、キーボードを強制的に閉じる
-              document.activeElement.blur();
-              $('input').blur();
-            }
-          });
-        })();
+    $("form[name = message]").keypress(function (e) {
+      if (e.which === 13) {
+        return false;
+      }
+    });
     </script>
     <link rel="stylesheet" type="text/css" href="liff.css" />
   </head>
