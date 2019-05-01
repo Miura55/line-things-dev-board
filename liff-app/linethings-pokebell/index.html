@@ -7,10 +7,14 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="liff.js"></script>
     <script type="text/javascript">
-    $('#tpy_mess').keypress(function (e) {
-      if (e.which === 13) {
-        return false;
-      }
+    $(function(){
+        $("#tpy_mess"). keydown(function(e) {
+            if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
+                return false;
+            } else {
+                return true;
+            }
+        });
     });
     </script>
     <link rel="stylesheet" type="text/css" href="liff.css" />
