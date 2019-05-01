@@ -9,17 +9,7 @@ body, table {
 p {
     padding: 0pt 14pt;
 }
-input[type="submit"] {
-  -webkit-appearance: none;
-  border-radius: 0;
-  padding: 15px 40px;
-  font-size: 1.2em;
-  background-color: #000;
-  color: #fff;
-  border-style: none;
-}
-input[type="text"]{
-  -webkit-appearance: none;
+input{
   border:0;
   padding:10px;
   font-size:1.3em;
@@ -31,6 +21,16 @@ input[type="text"]{
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+}
+
+input[type="submit"] {
+  -webkit-appearance: none;
+  border-radius: 0;
+  padding: 15px 40px;
+  font-size: 1.2em;
+  background-color: #000;
+  color: #fff;
+  border-style: none;
 }
 
 
