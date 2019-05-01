@@ -9,6 +9,12 @@ body, table {
 p {
     padding: 0pt 14pt;
 }
+input[type="submit"] {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+
 .tpy-mess{
   border:0;
   padding:10px;
