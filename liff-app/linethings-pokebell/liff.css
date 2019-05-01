@@ -24,7 +24,6 @@ p {
 }
 
 .submit_button {
-  -webkit-appearance: none;
   padding: 15px 40px;
   font-size: 1.2em;
   background-color: #000;
