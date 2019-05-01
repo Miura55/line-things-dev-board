@@ -23,6 +23,14 @@ input{
   border-radius: 3px;
 }
 
+input#submit_button {
+    padding: 15px 40px;
+    font-size: 1.2em;
+    background-color: #000;
+    color: #fff;
+    border-style: none;
+}
+
 .btn {
     padding: 2pt;
     font-size: 14pt;
