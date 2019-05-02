@@ -202,7 +202,8 @@ function liffGetUserService(service) {
 function getmessage(){
   //テキストボックス
 	var text = document.forms.form.tpy_mess.value;
-  alert(text);
+  message = text.split("")
+  alert(message);
 }
 
 function liffGetPSDIService(service) {
