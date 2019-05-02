@@ -204,7 +204,10 @@ function getmessage(){
   var message = ["1"]
 	var text = document.forms.form.tpy_mess.value;
   message.push(text.split(""));
-  window.ledCharacteristic.writeValue(new Uint8Array(message)).catch(error => {
+  // メッセージを送信
+  window.ledCharacteristic.writeValue(
+    new Uint8Array(message.map(str => parseInt(str, 10)))
+  ).catch(error => {
     uiStatusError(makeErrorMsg(error), false);
   })
   alert(message);
