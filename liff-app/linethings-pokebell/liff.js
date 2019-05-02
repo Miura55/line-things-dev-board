@@ -204,10 +204,10 @@ function getmessage(){
   var message = ["1"]
 	var text = document.forms.form.tpy_mess.value;
   message.push(text.split(""));
-  alert(message);
   window.ledCharacteristic.writeValue(new Uint8Array(message)).catch(error => {
     uiStatusError(makeErrorMsg(error), false);
   })
+  alert(message);
 }
 
 function liffGetPSDIService(service) {
