@@ -204,9 +204,9 @@ function getmessage(){
   var message = []
 	var text = document.forms.form.tpy_mess.value;
   message.push(text.split(""));
-  var cmd = [1, message.length]
+  var cmd = [1, message.length];
   cmd.push(message.map(str => parseInt(str, 10)));
-  
+
   // メッセージを送信
   window.ledCharacteristic.writeValue(
     new Uint8Array(cmd)
