@@ -209,7 +209,7 @@ function getmessage(){
 
   // メッセージを送信
   window.ledCharacteristic.writeValue(
-    new Uint8Array(cmd.map( str => parseInt(str, 10) ))
+    new Uint8Array(cmd.map(Number))
   ).catch(error => {
     uiStatusError(makeErrorMsg(error), false);
   });
