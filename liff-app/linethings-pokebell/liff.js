@@ -201,8 +201,9 @@ function liffGetUserService(service) {
 
 function getmessage(){
   //テキストボックス
+  var message = ["1"]
 	var text = document.forms.form.tpy_mess.value;
-  message = text.split("")
+  message.push(text.split(""));
   alert(message);
 }
 
