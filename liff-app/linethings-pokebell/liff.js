@@ -213,7 +213,7 @@ function getmessage(){
   ).catch(error => {
     uiStatusError(makeErrorMsg(error), false);
   })
-  alert(message);
+  alert(cmd);
 }
 
 function liffGetPSDIService(service) {
