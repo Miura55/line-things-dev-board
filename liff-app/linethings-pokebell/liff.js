@@ -2,7 +2,6 @@
 const USER_SERVICE_UUID         = '27b2df94-cc66-4a99-a976-ad9fc58ba1cc'; // LED, Button
 // User service characteristics
 const LED_CHARACTERISTIC_UUID   = 'E9062E71-9E62-4BC6-B0D3-35CDCD9B027B';
-const BTN_CHARACTERISTIC_UUID   = '62FBD229-6EDD-4D1A-B554-5C4E1BB29169';
 
 // PSDI Service UUID: Fixed value for Developer Trial
 const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Device ID
@@ -199,12 +198,16 @@ function liffGetUserService(service) {
     });
 }
 
+
 function getmessage(){
   //テキストボックス
   var message = ["1"]
 	var text = document.forms.form.tpy_mess.value;
   message.push(text.split(""));
   alert(message);
+  window.ledCharacteristic.writeValue(new Uint8Array(message)).catch(error => {
+    uiStatusError(makeErrorMsg(error), false);
+  })
 }
 
 function liffGetPSDIService(service) {
