@@ -201,15 +201,14 @@ function liffGetUserService(service) {
 
 function getmessage(){
   //テキストボックス
-  var message = []
 	var text = document.forms.form.tpy_mess.value;
-  message.push(text.split(""));
+  var message = text.split("").map(Number)
   var cmd0 = [1, text.length];
   var cmd = cmd0.concat(message);
 
   // メッセージを送信
   window.ledCharacteristic.writeValue(
-    new Uint8Array(cmd.map(Number))
+    new Uint8Array(cmd)
   ).catch(error => {
     uiStatusError(makeErrorMsg(error), false);
   });
