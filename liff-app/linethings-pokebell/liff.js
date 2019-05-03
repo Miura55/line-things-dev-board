@@ -1,15 +1,11 @@
 // User service UUID: Change this to your generated service UUID
 const USER_SERVICE_UUID         = '27b2df94-cc66-4a99-a976-ad9fc58ba1cc'; // LED, Button
 // User service characteristics
-const LED_CHARACTERISTIC_UUID   = 'E9062E71-9E62-4BC6-B0D3-35CDCD9B027B';
+const WRITE_CHARACTERISTIC_UUID   = 'E9062E71-9E62-4BC6-B0D3-35CDCD9B027B';
 
 // PSDI Service UUID: Fixed value for Developer Trial
 const PSDI_SERVICE_UUID         = 'E625601E-9E55-4597-A598-76018A0D293D'; // Device ID
 const PSDI_CHARACTERISTIC_UUID  = '26E2B12B-85F0-4F3F-9FDD-91D114270E6E';
-
-// UI settings
-let ledState = false; // true: LED on, false: LED off
-let clickCount = 0;
 
 // -------------- //
 // On window load //
@@ -19,16 +15,6 @@ window.onload = () => {
     initializeApp();
 };
 
-// ----------------- //
-// Handler functions //
-// ----------------- //
-
-function handlerToggleLed() {
-    ledState = !ledState;
-
-    uiToggleLedButton(ledState);
-    liffToggleDeviceLedState(ledState);
-}
 
 // ------------ //
 // UI functions //
@@ -170,11 +156,6 @@ function liffConnectToDevice(device) {
             // Remove disconnect callback
             device.removeEventListener('gattserverdisconnected', disconnectCallback);
 
-            // Reset LED state
-            ledState = false;
-            // Reset UI elements
-            uiToggleLedButton(false);
-
             // Try to reconnect
             initializeLiff();
         };
@@ -188,30 +169,11 @@ function liffConnectToDevice(device) {
 function liffGetUserService(service) {
 
     // Toggle LED
-    service.getCharacteristic(LED_CHARACTERISTIC_UUID).then(characteristic => {
+    service.getCharacteristic(WRITE_CHARACTERISTIC_UUID).then(characteristic => {
         window.ledCharacteristic = characteristic;
-
-        // Switch off by default
-        liffToggleDeviceLedState(false);
     }).catch(error => {
         uiStatusError(makeErrorMsg(error), false);
     });
-}
-
-
-function getmessage(){
-  //テキストボックス
-	var text = document.forms.form.tpy_mess.value;
-  var message = text.split("").map(Number)
-  var cmd0 = [1, text.length];
-  var cmd = cmd0.concat(message);
-
-  // メッセージを送信
-  window.ledCharacteristic.writeValue(
-    new Uint8Array(cmd)
-  ).catch(error => {
-    uiStatusError(makeErrorMsg(error), false);
-  });
 }
 
 function liffGetPSDIService(service) {
@@ -228,12 +190,17 @@ function liffGetPSDIService(service) {
     });
 }
 
-function liffToggleDeviceLedState(state) {
-    // on: 0x01
-    // off: 0x00
-    window.ledCharacteristic.writeValue(
-        state ? new Uint8Array([0x00, 0x01]) : new Uint8Array([0x00, 0x00])
-    ).catch(error => {
-        uiStatusError(makeErrorMsg(error), false);
-    });
+function getmessage(){
+  //テキストボックス
+	var text = document.forms.form.tpy_mess.value;
+  var message = text.split("").map(Number)
+  var cmd0 = [1, text.length];
+  var cmd = cmd0.concat(message);
+
+  // メッセージを送信
+  window.ledCharacteristic.writeValue(
+    new Uint8Array(cmd)
+  ).catch(error => {
+    uiStatusError(makeErrorMsg(error), false);
+  });
 }
