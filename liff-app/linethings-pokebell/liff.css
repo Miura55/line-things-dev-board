@@ -28,7 +28,7 @@ input[type="button"] {
   display: inline-block;
   padding: 0.5em 1em;
   text-decoration: none;
-  background: #33FF99;/*ボタン色*/
+  background: #0033FF;/*ボタン色*/
   color: #FFF;
   border-bottom: solid 4px #627295;
   border-radius: 3px;
