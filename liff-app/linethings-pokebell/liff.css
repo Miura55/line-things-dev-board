@@ -26,6 +26,8 @@ input{
 input[type="button"] {
   -webkit-appearance: none;
   display: inline-block;
+  font-size: 1.4em;
+  font-weight: bold;
   padding: 0.5em 1em;
   text-decoration: none;
   background: #0033FF;/*ボタン色*/
