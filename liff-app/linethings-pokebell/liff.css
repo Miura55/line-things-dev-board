@@ -25,12 +25,19 @@ input{
 
 input[type="button"] {
   -webkit-appearance: none;
-  border-radius: 0;
-  padding: 15px 40px;
-  font-size: 1.2em;
-  background-color: #000;
-  color: #fff;
-  border-style: none;
+  display: inline-block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  background: #33FF99;/*ボタン色*/
+  color: #FFF;
+  border-bottom: solid 4px #627295;
+  border-radius: 3px;
+}
+input[type="button"]:active{
+  /*ボタンを押したとき*/
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);/*下に動く*/
+  border-bottom: none;/*線を消す*/
 }
 
 
