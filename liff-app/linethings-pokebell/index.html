@@ -33,7 +33,7 @@
       <!-- input num -->
       <form id="form" name="send_message" action="">
         <p>メッセージを数字で入力<br>
-          <input id="tpy_mess" type="text" name="message" placeholder="message">
+          <input id="tpy_mess" type="number" pattern="\d*" name="message" placeholder="message">
         </p>
         <p><input id="submit_button" type="button" value="送信" onclick="getmessage()"></p>
       </form>
